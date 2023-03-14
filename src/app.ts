@@ -1,9 +1,9 @@
-import express, { Application, Express } from 'express'
-import cors from 'cors'
+import express, { Application, Express, json } from 'express'
+import cors = require('cors')
 import bodyParser = require('body-parser')
 import http from 'http'
 
-import users from './routes/users.router'
+import users from './routes/users'
 
 export default class App {
     private app: Application
@@ -21,13 +21,14 @@ export default class App {
         this.app.use('/users', users)
     }
     middleware() {
-        this.app.use(cors)
+        // this.app.use(json())
         this.app.use(bodyParser.urlencoded({ extended: false }))
-        this.app.use(bodyParser.json)
+        this.app.use(bodyParser.json())
+        this.app.use(cors())
     }
     async listen() {
         const server = http.createServer(this.app)
         await server.listen(this.app.get('port'))
-        console.log('[INFO] Server is running on port: ', this.app.get('port'))
+        console.log(`[INFO] Server is running on port:`, this.app.get('port'))
     }
 }
