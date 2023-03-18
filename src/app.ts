@@ -3,7 +3,7 @@ import cors = require('cors')
 import bodyParser = require('body-parser')
 import http from 'http'
 
-import users from './routes/users'
+import signin from './routes/signin'
 
 export default class App {
     private app: Application
@@ -18,7 +18,7 @@ export default class App {
         this.app.set('port', this.port)
     }
     router() {
-        this.app.use('/users', users)
+        this.app.use('/signin', signin)
     }
     middleware() {
         // this.app.use(json())
