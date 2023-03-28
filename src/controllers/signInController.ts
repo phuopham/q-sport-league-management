@@ -19,10 +19,6 @@ export const signInController = async (req: Request, res: Response) => {
             where: {
                 email: email
             },
-            include: {
-                Role: true
-            },
-
         })
         const profile: iUser = { id: user.id, username: user.username, email: user.email }
         console.log(user)
@@ -49,9 +45,7 @@ export const signUpController = async (req: Request, res: Response) => {
                 username: username,
                 email: email,
                 password: hashSync(password, 10),
-                Role: {
-                    connect: { id: 1 }
-                }
+                Role: Role.JOURALIST
             }
         })
         const profile: iUser = { id: result.id, username: result.username, email: result.email }

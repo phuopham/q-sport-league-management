@@ -15,18 +15,93 @@ model User {
   username String @unique
   password String
   email    String @unique
-  Role     Role[]
+  Role     Role   @default(JOURALIST)
 }
 
-model Role {
-  id         Int          @id @default(autoincrement())
-  role       String       @unique
-  User       User[]
-  Permission Permission[]
+model League {
+  id          Int      @id @default(autoincrement())
+  shortName   String
+  longName    String
+  description String
+  startDate   DateTime
+  TeamA       Team[]
+  Match       Match[]
 }
 
-model Permission {
-  id         Int    @id @default(autoincrement())
-  permission String
-  Role       Role[]
+model Team {
+  id          Int      @id @default(autoincrement())
+  League      League   @relation(fields: [leagueId], references: [id])
+  leagueId    Int
+  shortName   String
+  name        String
+  description String
+  players     Player[]
+  Home        Match[]  @relation("Home")
+  Guest       Match[]  @relation("Guest")
+}
+
+model Player {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Team  Team[]
+  event Event[]
+}
+
+model Match {
+  id        Int       @id @default(autoincrement())
+  MatchType MatchType
+  leagueId  Int
+  League    League    @relation(fields: [leagueId], references: [id])
+  homeiD    Int
+  Home      Team      @relation("Home", fields: [homeiD], references: [id])
+  guestId   Int
+  Guest     Team      @relation("Guest", fields: [guestId], references: [id])
+  teamId    Int?
+  timestamp DateTime  @default(now())
+}
+
+model Event {
+  id        Int       @id @default(autoincrement())
+  Player    Player[]
+  event     String
+  EventType EventType @default(INFO)
+  timestamp DateTime  @default(now())
+}
+
+enum MatchType {
+  CASUAL
+  TOURAMENT
+  KNOCKOUT
+  QUARTERFINAL
+  SEMIFINAL
+  THIRDPRIZE
+  FINAL
+  GROUP1
+  GROUP2
+  GROUP3
+  GROUP4
+  GROUP5
+  GROUP6
+  GROUP7
+  GROUP8
+  GROUP9
+  GROUP10
+  GROUP11
+  GROUP12
+  GROUP13
+  GROUP14
+  GROUP15
+  GROUP16
+}
+
+enum EventType {
+  SCORE
+  FAULT
+  INFO
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+  JOURALIST
 }

@@ -1,5 +1,5 @@
 {
-  "name": "restaurant-api",
+  "name": "sqlm-api",
   "version": "1.0.0",
   "main": "src/index.ts",
   "license": "MIT",
