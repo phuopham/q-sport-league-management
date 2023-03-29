@@ -1,9 +1,10 @@
-import express, { Application, Express, json } from 'express'
+import express, { Application } from 'express'
 import cors = require('cors')
 import bodyParser = require('body-parser')
 import http from 'http'
 
 import signin from './routes/signin'
+import profile from './routes/profile'
 
 export default class App {
     private app: Application
@@ -19,6 +20,7 @@ export default class App {
     }
     router() {
         this.app.use('/signin', signin)
+        this.app.use('/profile', profile)
     }
     middleware() {
         // this.app.use(json())
