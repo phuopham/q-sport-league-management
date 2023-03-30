@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { iUser } from '../controllers/profileController'
+import { iUser } from '../utils/customInterface'
 import { PrismaClient, Role } from '@prisma/client'
 
 const prisma = new PrismaClient()

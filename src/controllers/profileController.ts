@@ -3,17 +3,12 @@ import { PrismaClient, Role } from '@prisma/client'
 import { compareSync, hashSync } from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { Err } from '../utils/errorCode';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { iFunction, iUser } from '../utils/customInterface'
 
 const prisma = new PrismaClient();
 
-export interface iUser {
-    id: number,
-    username: string,
-    email: string
-    role: Role
-}
-
-export const signInController = async (req: Request, res: Response) => {
+export const signInController: iFunction = async (req: Request, res: Response) => {
     const { email, password } = req.body
     if (!email || !password) return res.status(400).json({ msg: Err.NOTFOUND_USER })
     try {
@@ -23,8 +18,7 @@ export const signInController = async (req: Request, res: Response) => {
             },
         })
         const profile: iUser = { id: user.id, username: user.username, email: user.email, role: user.Role }
-        console.log(user)
-        console.log(profile)
+        console.log(['Access granted to', profile])
         if (!user) return res.status(400).json({ msg: Err.INVALID_USER })
         if (!compareSync(password, user.password)) return res.status(400).json({ msg: Err.INVALID_USER })
 
@@ -33,11 +27,11 @@ export const signInController = async (req: Request, res: Response) => {
 
     } catch (err) {
         console.log(err)
-        res.status(500).json({ msg: Err.SERVER_ERROR })
+        return res.status(500).json({ msg: Err.SERVER_ERROR })
     }
 }
 
-export const signUpController = async (req: Request, res: Response) => {
+export const signUpController: iFunction = async (req: Request, res: Response) => {
     const { username, email, password } = req.body
     if (!username || !email || !password) return res.status(400).json({ msg: Err.NOTFOUND_USER })
 
@@ -53,34 +47,36 @@ export const signUpController = async (req: Request, res: Response) => {
         const profile: iUser = { id: result.id, username: result.username, email: result.email, role: result.Role }
         const token = jwt.sign(profile, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: 60 })
 
-        res.status(200).json({ profile, token })
+        return res.status(200).json({ profile, token })
 
     } catch (err) {
         console.log(err)
-        res.status(500).json({ msg: Err.SERVER_ERROR })
+        return res.status(500).json({ msg: Err.SERVER_ERROR })
     }
 }
 
-export const getProfile = (req: Request, res: Response) => {
-    res.status(200).json(req.user)
+export const getProfile: iFunction = async (req: Request, res: Response) => {
+    return res.status(200).json(req.user)
 }
 
-export const editProfile = async (req: Request, res: Response) => {
+export const editProfile: iFunction = async (req: Request, res: Response) => {
     try {
         const { username, password, email } = req.body
+        if (username != req.user.username) return res.status(400).json({ msg: Err.INSUFFICIENT_CONTENT })
         const updateUser = await prisma.user.update({
             where: {
                 id: req.user.id,
-                username: username
             },
             data: {
                 password: hashSync(password, 10),
                 email: email,
             }
         })
-        res.json(updateUser)
+        const profile: iUser = { id: updateUser.id, username: updateUser.username, email: updateUser.email, role: updateUser.Role }
+        return res.json(profile)
     } catch (err) {
-        console.log(err)
-        res.status(500).json({ msg: Err.SERVER_ERROR })
+        if ((err as PrismaClientKnownRequestError).code === 'P2002') return res.status(400).json({ msg: Err.NOT_UNIQUE_EMAIL })
+        return res.status(500).json({ msg: Err.SERVER_ERROR })
+
     }
 }

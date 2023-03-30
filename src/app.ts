@@ -21,6 +21,7 @@ export default class App {
     router() {
         this.app.use('/signin', signin)
         this.app.use('/profile', profile)
+        // this.app.use('')
     }
     middleware() {
         // this.app.use(json())
