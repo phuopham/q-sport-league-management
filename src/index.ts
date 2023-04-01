@@ -1,7 +1,7 @@
 import { Application } from 'express'
 import dotenv from 'dotenv';
 import App from './app'
-import { iUser } from './utils/customInterface';
+import { iUser } from './utils/customType';
 dotenv.config();
 
 const port: number = + (process.env.PORT ?? 3000)

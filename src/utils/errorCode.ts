@@ -1,8 +1,14 @@
 export enum Err {
-    NOTFOUND_USER = 'Email and Password is required !',
-    INVALID_USER = 'Email or password is incorrect !',
-    SERVER_ERROR = 'Internal server error !',
-    PERMISSION_DENIED = 'Permission denied !',
     INSUFFICIENT_CONTENT = 'Insufficient content!',
-    NOT_UNIQUE_EMAIL = 'Email address is already in use. Please set different one !'
+    INSUFFICIENT_PRIVILEGE = "Insufficient Privilege",
+    INSUFFICIENT_TOKEN = 'Insufficient token',
+    INVALID_PATH = 'Invalid path !',
+    INVALID_USER = 'Email or password is incorrect !',
+    NOTFOUND_TOKEN = 'Token not found !',
+    NOTFOUND_USER = 'Email and Password is required !',
+    NOT_UNIQUE_EMAIL = 'Email address is already in use. Please set different one !',
+    NOT_UNIQUE_USER = 'User address is already in use. Please set different one !',
+    NOT_UNIQUE_EMAIL_OR_USERNAME = 'username or email is already in use. Please set different one!',
+    PERMISSION_DENIED = 'Permission denied !',
+    SERVER_ERROR = 'Internal server error !',
 }

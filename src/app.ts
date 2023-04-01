@@ -3,8 +3,9 @@ import cors = require('cors')
 import bodyParser = require('body-parser')
 import http from 'http'
 
-import signin from './routes/signin'
-import profile from './routes/profile'
+import signin from './routes/profile/signin'
+import profile from './routes/profile/profile'
+import user from './routes/user/user'
 
 export default class App {
     private app: Application
@@ -21,7 +22,7 @@ export default class App {
     router() {
         this.app.use('/signin', signin)
         this.app.use('/profile', profile)
-        // this.app.use('')
+        this.app.use('/users', user)
     }
     middleware() {
         // this.app.use(json())

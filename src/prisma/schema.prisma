@@ -15,15 +15,15 @@ model User {
   username String @unique
   password String
   email    String @unique
-  Role     Role   @default(JOURALIST)
+  role     Role   @default(JOURALIST)
 }
 
 model League {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   shortName   String
   longName    String
-  description String
-  startDate   DateTime
+  description String?
+  startDate   DateTime?
   TeamA       Team[]
   Match       Match[]
 }
@@ -33,39 +33,33 @@ model Team {
   League      League   @relation(fields: [leagueId], references: [id])
   leagueId    Int
   shortName   String
-  name        String
-  description String
+  name        String?
+  description String?
   players     Player[]
   Home        Match[]  @relation("Home")
   Guest       Match[]  @relation("Guest")
 }
 
 model Player {
-  id    Int     @id @default(autoincrement())
-  name  String
-  Team  Team[]
-  event Event[]
+  id          Int    @id @default(autoincrement())
+  name        String
+  Team        Team[]
+  scoreDetail Json
 }
 
 model Match {
-  id        Int       @id @default(autoincrement())
-  MatchType MatchType
-  leagueId  Int
-  League    League    @relation(fields: [leagueId], references: [id])
-  homeiD    Int
-  Home      Team      @relation("Home", fields: [homeiD], references: [id])
-  guestId   Int
-  Guest     Team      @relation("Guest", fields: [guestId], references: [id])
-  teamId    Int?
-  timestamp DateTime  @default(now())
-}
-
-model Event {
-  id        Int       @id @default(autoincrement())
-  Player    Player[]
-  event     String
-  EventType EventType @default(INFO)
-  timestamp DateTime  @default(now())
+  id         Int       @id @default(autoincrement())
+  matchType  MatchType
+  leagueId   Int
+  League     League    @relation(fields: [leagueId], references: [id])
+  homeiD     Int
+  Home       Team      @relation("Home", fields: [homeiD], references: [id])
+  guestId    Int
+  Guest      Team      @relation("Guest", fields: [guestId], references: [id])
+  homeScore  Int
+  guestScore Int
+  event      Json?
+  timestamp  DateTime  @default(now())
 }
 
 enum MatchType {
@@ -92,12 +86,6 @@ enum MatchType {
   GROUP14
   GROUP15
   GROUP16
-}
-
-enum EventType {
-  SCORE
-  FAULT
-  INFO
 }
 
 enum Role {

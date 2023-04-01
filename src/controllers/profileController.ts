@@ -4,7 +4,7 @@ import { compareSync, hashSync } from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { Err } from '../utils/errorCode';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { iFunction, iUser } from '../utils/customInterface'
+import { iFunction, iUser } from '../utils/customType'
 
 const prisma = new PrismaClient();
 
@@ -17,7 +17,7 @@ export const signInController: iFunction = async (req: Request, res: Response) =
                 email: email
             },
         })
-        const profile: iUser = { id: user.id, username: user.username, email: user.email, role: user.Role }
+        const profile: iUser = { id: user.id, username: user.username, email: user.email, role: user.role }
         console.log(['Access granted to', profile])
         if (!user) return res.status(400).json({ msg: Err.INVALID_USER })
         if (!compareSync(password, user.password)) return res.status(400).json({ msg: Err.INVALID_USER })
@@ -41,10 +41,10 @@ export const signUpController: iFunction = async (req: Request, res: Response) =
                 username: username,
                 email: email,
                 password: hashSync(password, 10),
-                Role: Role.JOURALIST
+                role: Role.ADMIN
             }
         })
-        const profile: iUser = { id: result.id, username: result.username, email: result.email, role: result.Role }
+        const profile: iUser = { id: result.id, username: result.username, email: result.email, role: result.role }
         const token = jwt.sign(profile, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: 60 })
 
         return res.status(200).json({ profile, token })
@@ -72,9 +72,10 @@ export const editProfile: iFunction = async (req: Request, res: Response) => {
                 email: email,
             }
         })
-        const profile: iUser = { id: updateUser.id, username: updateUser.username, email: updateUser.email, role: updateUser.Role }
+        const profile: iUser = { id: updateUser.id, username: updateUser.username, email: updateUser.email, role: updateUser.role }
         return res.json(profile)
     } catch (err) {
+        console.log(err)
         if ((err as PrismaClientKnownRequestError).code === 'P2002') return res.status(400).json({ msg: Err.NOT_UNIQUE_EMAIL })
         return res.status(500).json({ msg: Err.SERVER_ERROR })
 
