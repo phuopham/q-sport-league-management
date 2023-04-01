@@ -19,12 +19,13 @@ model User {
 }
 
 model League {
-  id          Int       @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   shortName   String
   longName    String
   description String?
+  status      LeagueStatus
   startDate   DateTime?
-  TeamA       Team[]
+  Team        Team[]
   Match       Match[]
 }
 
@@ -41,25 +42,27 @@ model Team {
 }
 
 model Player {
-  id          Int    @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
   Team        Team[]
   scoreDetail Json
+  status      PlayerStatus @default(ACTIVE)
 }
 
 model Match {
-  id         Int       @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
   matchType  MatchType
   leagueId   Int
-  League     League    @relation(fields: [leagueId], references: [id])
+  League     League      @relation(fields: [leagueId], references: [id])
   homeiD     Int
-  Home       Team      @relation("Home", fields: [homeiD], references: [id])
+  Home       Team        @relation("Home", fields: [homeiD], references: [id])
   guestId    Int
-  Guest      Team      @relation("Guest", fields: [guestId], references: [id])
-  homeScore  Int
-  guestScore Int
+  Guest      Team        @relation("Guest", fields: [guestId], references: [id])
+  homeScore  Int         @default(0)
+  guestScore Int         @default(0)
+  status     MatchStatus @default(PLANED)
   event      Json?
-  timestamp  DateTime  @default(now())
+  timestamp  DateTime?
 }
 
 enum MatchType {
@@ -92,4 +95,24 @@ enum Role {
   ADMIN
   OPERATOR
   JOURALIST
+}
+
+enum LeagueStatus {
+  TOURAMENT
+  GROUPS
+  ELIMINATE
+  FINAL
+  ARCHIVED
+}
+
+enum MatchStatus {
+  CREATED
+  PLANED
+  ONGOING
+  FINISHED
+}
+
+enum PlayerStatus {
+  ACTIVE
+  INACTIVE
 }
