@@ -25,8 +25,8 @@ export default class App {
         this.app.use('/signin', signin)
         this.app.use('/profile', profile)
         this.app.use('/users', user)
-        this.app.use('/league', league)
-        this.app.use('/team', team)
+        this.app.use('/leagues', league)
+        this.app.use('/teams', team)
     }
     middleware() {
         // this.app.use(json())
