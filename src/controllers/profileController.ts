@@ -18,11 +18,11 @@ export const signInController: iFunction = async (req: Request, res: Response) =
             },
         })
         const profile: iUser = { id: user.id, username: user.username, email: user.email, role: user.role }
-        console.log(['Access granted to', profile])
         if (!user) return res.status(400).json({ msg: Err.INVALID_USER })
         if (!compareSync(password, user.password)) return res.status(400).json({ msg: Err.INVALID_USER })
 
         const token = jwt.sign(profile, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: 60 * 60 })
+        console.log(['Access granted to', profile])
         return res.json({ profile, token })
 
     } catch (err) {

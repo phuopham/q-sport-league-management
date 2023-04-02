@@ -23,6 +23,13 @@ export const getAPlayer: iFunction = async (req: Request, res: Response) => {
         const player = await prisma.player.findFirstOrThrow({
             where: {
                 id: id
+            },
+            include: {
+                Team: {
+                    include: {
+                        League: true
+                    }
+                }
             }
         })
         return res.json(player)

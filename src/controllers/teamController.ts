@@ -23,6 +23,10 @@ export const getATeam: iFunction = async (req: Request, res: Response) => {
         const team = await prisma.team.findFirstOrThrow({
             where: {
                 id: id
+            },
+            include: {
+                players: true,
+                League: true
             }
         })
         return res.json(team)

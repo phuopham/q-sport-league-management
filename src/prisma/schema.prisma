@@ -52,8 +52,8 @@ model Player {
 model Match {
   id         Int         @id @default(autoincrement())
   matchType  MatchType
-  leagueId   Int
-  League     League      @relation(fields: [leagueId], references: [id])
+  leagueId   Int?
+  League     League?     @relation(fields: [leagueId], references: [id])
   homeiD     Int
   Home       Team        @relation("Home", fields: [homeiD], references: [id])
   guestId    Int
