@@ -11,5 +11,7 @@ export enum Err {
     NOT_UNIQUE_EMAIL_OR_USERNAME = 'username or email is already in use. Please set different one!',
     PERMISSION_DENIED = 'Permission denied !',
     SERVER_ERROR = 'Internal server error !',
-    CANNOT_DELETE_TEAM = 'Cannot delete the team !'
+    CANNOT_DELETE_TEAM = 'Cannot delete the team ! Match/es was played.',
+    INVALID_PLAYERSTATUS = 'Invalid player status !',
+    CANNOT_DELETE_PLAYER = 'Cannot delete player right now! Try again after leagues players join has been archived.'
 }

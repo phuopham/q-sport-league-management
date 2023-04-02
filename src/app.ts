@@ -8,6 +8,7 @@ import profile from './routes/profile/profile'
 import user from './routes/user'
 import league from './routes/league'
 import team from './routes/team'
+import player from './routes/player'
 
 export default class App {
     private app: Application
@@ -27,6 +28,7 @@ export default class App {
         this.app.use('/users', user)
         this.app.use('/leagues', league)
         this.app.use('/teams', team)
+        this.app.use('/players', player)
     }
     middleware() {
         // this.app.use(json())

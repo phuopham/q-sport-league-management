@@ -35,7 +35,7 @@ export const getALeague: iFunction = async (req: Request, res: Response) => {
 export const addLeague: iFunction = async (req: Request, res: Response) => {
     const { shortName, longName, description, status, startDate } = req.body
     try {
-        const creatLeague = prisma.league.create({
+        const createLeague = prisma.league.create({
             data: {
                 shortName: shortName,
                 longName: longName,
@@ -44,7 +44,7 @@ export const addLeague: iFunction = async (req: Request, res: Response) => {
                 startDate: startDate
             }
         })
-        return res.json(creatLeague)
+        return res.json(createLeague)
     } catch (err) {
         console.log(err)
         return res.status(500).json({ msg: Err.SERVER_ERROR })
