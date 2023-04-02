@@ -5,7 +5,7 @@ import http from 'http'
 
 import signin from './routes/profile/signin'
 import profile from './routes/profile/profile'
-import user from './routes/user/user'
+import user from './routes/user'
 
 export default class App {
     private app: Application
@@ -20,9 +20,9 @@ export default class App {
         this.app.set('port', this.port)
     }
     router() {
-        this.app.use('/signin', signin)
-        this.app.use('/profile', profile)
-        this.app.use('/users', user)
+        this.app.use('v1/signin', signin)
+        this.app.use('v1/profile', profile)
+        this.app.use('v1/users', user)
     }
     middleware() {
         // this.app.use(json())

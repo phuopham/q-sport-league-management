@@ -23,7 +23,7 @@ model League {
   shortName   String
   longName    String
   description String?
-  status      LeagueStatus
+  status      LeagueStatus @default(REGISTRATION)
   startDate   DateTime?
   Team        Team[]
   Match       Match[]
@@ -98,6 +98,8 @@ enum Role {
 }
 
 enum LeagueStatus {
+  REGISTRATION
+  CANCELED
   TOURAMENT
   GROUPS
   ELIMINATE

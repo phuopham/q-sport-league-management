@@ -42,6 +42,13 @@ export const signUpController: iFunction = async (req: Request, res: Response) =
                 email: email,
                 password: hashSync(password, 10),
                 role: Role.ADMIN
+            },
+            select: {
+                id: true,
+                password: false,
+                username: true,
+                email: true,
+                role: true,
             }
         })
         const profile: iUser = { id: result.id, username: result.username, email: result.email, role: result.role }

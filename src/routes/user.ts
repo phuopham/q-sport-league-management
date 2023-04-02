@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { getAllUser, createUser, getAUser, editUser, deleteUser } from '../../controllers/userController'
-import { adminPrivilege } from '../../middleware/auth'
+import { getAllUser, createUser, getAUser, editUser, deleteUser } from '../controllers/userController'
+import { adminPrivilege } from '../middleware/auth'
 
 const user = Router()
 
