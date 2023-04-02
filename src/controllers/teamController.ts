@@ -1,4 +1,4 @@
-import { LeagueStatus, PrismaClient, Role } from "@prisma/client"
+import { PrismaClient } from "@prisma/client"
 import { Request, Response } from "express"
 import { Err } from "../utils/errorCode"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime"
@@ -6,88 +6,95 @@ import { iFunction } from "../utils/customType"
 
 const prisma = new PrismaClient()
 
-export const getAllLeague: iFunction = async (req: Request, res: Response) => {
+export const getAllTeam: iFunction = async (req: Request, res: Response) => {
     try {
-        const leagues = await prisma.league.findMany()
-        return res.json(leagues)
+        const teams = await prisma.team.findMany()
+        return res.json(teams)
     } catch (err) {
         console.log(err)
         return res.status(500).json({ msg: Err.SERVER_ERROR })
     }
 }
 
-export const getALeague: iFunction = async (req: Request, res: Response) => {
+export const getATeam: iFunction = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     if (isNaN(id)) return res.status(400).json({ msg: Err.INVALID_PATH })
     try {
-        const league = await prisma.league.findFirstOrThrow({
+        const team = await prisma.team.findFirstOrThrow({
             where: {
                 id: id
             }
         })
-        return res.json(league)
+        return res.json(team)
     } catch (err) {
         console.log(err)
         return res.status(500).json({ msg: Err.SERVER_ERROR })
     }
 }
 
-export const addLeague: iFunction = async (req: Request, res: Response) => {
-    const { shortName, longName, description, status, startDate } = req.body
+export const addTeam: iFunction = async (req: Request, res: Response) => {
+    const { leagueId, shortName, name, description, players } = req.body
     try {
-        const creatLeague = prisma.league.create({
+        const creatteam = prisma.team.create({
             data: {
+                leagueId: leagueId,
                 shortName: shortName,
-                longName: longName,
+                name: name,
                 description: description,
-                status: status,
-                startDate: startDate
+                players: players
             }
         })
-        return res.json(creatLeague)
+        return res.json(creatteam)
     } catch (err) {
         console.log(err)
         return res.status(500).json({ msg: Err.SERVER_ERROR })
     }
 }
 
-export const editLeague: iFunction = async (req: Request, res: Response) => {
+export const editTeam: iFunction = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
-    const { shortName, longName, description, status, startDate } = req.body
+    const { leagueId, shortName, name, description, players } = req.body
     if (isNaN(id)) return res.status(400).json({ msg: Err.INVALID_PATH })
     try {
-        const editLeague = await prisma.league.update({
+        const editteam = await prisma.team.update({
             where: {
                 id: id
             },
             data: {
+                leagueId: leagueId,
                 shortName: shortName,
-                longName: longName,
+                name: name,
                 description: description,
-                status: status,
-                startDate: startDate
+                players: players
             }
         })
-        return res.json(editLeague)
+        return res.json(editteam)
     } catch (err) {
         console.log(err)
         return res.status(500).json({ msg: Err.SERVER_ERROR })
     }
 }
 
-export const deleteLeague: iFunction = async (req: Request, res: Response) => {
+export const deleteTeam: iFunction = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     if (isNaN(id)) return res.status(400).json({ msg: Err.INVALID_PATH })
     try {
-        const league = await prisma.league.update({
+        const validate = await prisma.team.findFirstOrThrow({
             where: {
                 id: id
             },
-            data: {
-                status: LeagueStatus.CANCELED
+            include: {
+                Home: true,
+                Guest: true
             }
         })
-        return res.json(league)
+        if (validate.Home.length > 0 || validate.Guest.length > 0) return res.status(400).json({ msg: Err.CANNOT_DELETE_TEAM })
+        const team = await prisma.team.delete({
+            where: {
+                id: id
+            }
+        })
+        return res.json(team)
     } catch (err) {
         console.log(err)
         return res.status(500).json({ msg: Err.SERVER_ERROR })
