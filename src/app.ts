@@ -20,9 +20,9 @@ export default class App {
         this.app.set('port', this.port)
     }
     router() {
-        this.app.use('v1/signin', signin)
-        this.app.use('v1/profile', profile)
-        this.app.use('v1/users', user)
+        this.app.use('/signin', signin)
+        this.app.use('/profile', profile)
+        this.app.use('/users', user)
     }
     middleware() {
         // this.app.use(json())
