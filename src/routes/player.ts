@@ -6,10 +6,10 @@ const player = Router()
 
 player.use(authMiddleware)
     .get('/', getAllPlayer)
+    .get('/:id', getAPlayer)
 
 player.use(operatorPrivilege)
     .post('/', addPlayer)
-    .get('/:id', getAPlayer)
     .put('/:id', editPlayer)
     .delete('/:id', deletePlayer)
 

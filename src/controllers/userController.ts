@@ -50,22 +50,20 @@ export const getAUser: iFunction = async (req: Request, res: Response) => {
 }
 
 export const createUser: iFunction = async (req: Request, res: Response) => {
-    const { username, email, password } = req.body
+    const { username, email, password, role } = req.body
     if (!username || !email || !password) return res.status(400).json({ msg: Err.NOTFOUND_USER })
-
     try {
         const result = await prisma.user.create({
             data: {
                 username: username,
                 email: email,
                 password: hashSync(password, 10),
-                role: Role.JOURALIST
+                role: role as Role ?? Role.JOURNALIST
             }
         })
         const profile: iUser = { id: result.id, username: result.username, email: result.email, role: result.role }
-        const token = jwt.sign(profile, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: 60 })
 
-        return res.status(200).json({ profile, token })
+        return res.status(200).json({ profile })
 
     } catch (err) {
         console.log(err)
@@ -75,7 +73,9 @@ export const createUser: iFunction = async (req: Request, res: Response) => {
 
 export const editUser: iFunction = async (req: Request, res: Response) => {
     try {
-        const { id, username, password, email, role } = req.body
+        const id = Number(req.params.id)
+        if (isNaN(id)) return res.status(400).json({ msg: Err.INVALID_PATH })
+        const { username, password, email, role } = req.body
         const updateUser = await prisma.user.update({
             where: {
                 id: id,

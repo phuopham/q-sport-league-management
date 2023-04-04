@@ -23,6 +23,10 @@ export const getALeague: iFunction = async (req: Request, res: Response) => {
         const league = await prisma.league.findFirstOrThrow({
             where: {
                 id: id
+            },
+            include: {
+                Team: true,
+                Match: true
             }
         })
         return res.json(league)
@@ -35,7 +39,7 @@ export const getALeague: iFunction = async (req: Request, res: Response) => {
 export const addLeague: iFunction = async (req: Request, res: Response) => {
     const { shortName, longName, description, status, startDate } = req.body
     try {
-        const createLeague = prisma.league.create({
+        const createLeague = await prisma.league.create({
             data: {
                 shortName: shortName,
                 longName: longName,

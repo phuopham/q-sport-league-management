@@ -6,8 +6,8 @@ const user = Router()
 
 user.use(adminPrivilege)
     .get('/', getAllUser)
-    .post('/', createUser)
     .get('/:id', getAUser)
+    .post('/', createUser)
     .put('/:id', editUser)
     .delete('/:id', deleteUser)
 

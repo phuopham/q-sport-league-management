@@ -7,6 +7,6 @@ const profile = Router()
 profile
     .use(authMiddleware)
     .get('/', getProfile)
-    .post('/', editProfile)
+    .put('/', editProfile)
 
 export default profile

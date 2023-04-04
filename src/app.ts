@@ -6,9 +6,10 @@ import http from 'http'
 import signin from './routes/profile/signin'
 import profile from './routes/profile/profile'
 import user from './routes/user'
-import league from './routes/league'
+import leagues from './routes/league/leagues'
 import team from './routes/team'
 import player from './routes/player'
+import league from './routes/league/league'
 
 export default class App {
     private app: Application
@@ -26,9 +27,10 @@ export default class App {
         this.app.use('/signin', signin)
         this.app.use('/profile', profile)
         this.app.use('/users', user)
-        this.app.use('/leagues', league)
         this.app.use('/teams', team)
         this.app.use('/players', player)
+        this.app.use('/leagues', leagues)
+        this.app.use('/leagues/:leagueId', league)
     }
     middleware() {
         // this.app.use(json())

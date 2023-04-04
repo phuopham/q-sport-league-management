@@ -15,7 +15,7 @@ model User {
   username String @unique
   password String
   email    String @unique
-  role     Role   @default(JOURALIST)
+  role     Role   @default(JOURNALIST)
 }
 
 model League {
@@ -94,7 +94,7 @@ enum MatchType {
 enum Role {
   ADMIN
   OPERATOR
-  JOURALIST
+  JOURNALIST
 }
 
 enum LeagueStatus {

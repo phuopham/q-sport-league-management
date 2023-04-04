@@ -8,7 +8,14 @@ const prisma = new PrismaClient()
 
 export const getAllPlayer: iFunction = async (req: Request, res: Response) => {
     try {
-        const players = await prisma.player.findMany()
+        const players = await prisma.player.findMany({
+            select: {
+                id: true,
+                name: true,
+                status: true,
+                scoreDetail: false // do some logic for FE
+            }
+        })
         return res.json(players)
     } catch (err) {
         console.log(err)
@@ -42,7 +49,8 @@ export const getAPlayer: iFunction = async (req: Request, res: Response) => {
 export const addPlayer: iFunction = async (req: Request, res: Response) => {
     const { name } = req.body
     try {
-        const createplayer = prisma.player.create({
+
+        const createplayer = await prisma.player.create({
             data: {
                 name: name,
                 scoreDetail: {}
@@ -67,7 +75,7 @@ export const editPlayer: iFunction = async (req: Request, res: Response) => {
             },
             data: {
                 name: name,
-                status: status
+                status: status as PlayerStatus
             }
         })
         return res.json(editplayer)

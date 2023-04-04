@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, Team } from "@prisma/client"
 import { Request, Response } from "express"
 import { Err } from "../utils/errorCode"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime"
@@ -45,7 +45,7 @@ export const addTeam: iFunction = async (req: Request, res: Response) => {
                 shortName: shortName,
                 name: name,
                 description: description,
-                players: players
+                players: players //have issue here
             }
         })
         return res.json(creatteam)
@@ -69,7 +69,7 @@ export const editTeam: iFunction = async (req: Request, res: Response) => {
                 shortName: shortName,
                 name: name,
                 description: description,
-                players: players
+                players: players //have issue here
             }
         })
         return res.json(editteam)

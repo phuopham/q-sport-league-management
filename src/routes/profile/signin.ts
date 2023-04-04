@@ -6,7 +6,7 @@ const signin = Router()
 
 signin
     .post('/', signInController)
-// init only 
-//  .post('/new', signUpController)
+    // init only 
+    .post('/new', signUpController)
 
 export default signin
