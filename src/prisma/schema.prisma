@@ -24,6 +24,7 @@ model League {
   longName    String
   description String?
   status      LeagueStatus @default(REGISTRATION)
+  leagueType  LeagueType   @default(TOURNAMENT)
   startDate   DateTime?
   Team        Team[]
   Match       Match[]
@@ -65,9 +66,16 @@ model Match {
   timestamp  DateTime?
 }
 
+enum LeagueType {
+  TOURNAMENT
+  FOURGROUPS
+  TWOGROUPS
+  ELIMINATION
+}
+
 enum MatchType {
   CASUAL
-  TOURAMENT
+  TOURNAMENT
   KNOCKOUT
   QUARTERFINAL
   SEMIFINAL

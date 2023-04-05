@@ -1,7 +1,6 @@
 import { PrismaClient, Role } from "@prisma/client"
 import { hashSync } from "bcrypt"
 import { iFunction, iUser } from "../utils/customType"
-import jwt from 'jsonwebtoken'
 import { Request, Response } from "express"
 import { Err } from "../utils/errorCode"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime"
