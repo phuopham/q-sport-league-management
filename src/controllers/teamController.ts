@@ -105,3 +105,39 @@ export const deleteTeam: iFunction = async (req: Request, res: Response) => {
     }
 }
 
+export const getAllTeamInLeague: iFunction = async (req: Request, res: Response) => {
+    const leagueId = Number(req.params.leagueId)
+    if (isNaN(leagueId)) return res.status(400).json({ msg: Err.INVALID_PATH })
+    try {
+        const teams = await prisma.team.findMany({
+            where: {
+                leagueId: leagueId
+            }
+        })
+        return res.json(teams)
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ msg: Err.SERVER_ERROR })
+    }
+}
+
+export const getATeamInLeague: iFunction = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    const leagueId = Number(req.params.leagueId)
+    if (isNaN(id) || isNaN(leagueId)) return res.status(400).json({ msg: Err.INVALID_PATH })
+    try {
+        const team = await prisma.team.findFirstOrThrow({
+            where: {
+                id: id,
+                leagueId: leagueId
+            },
+            include: {
+                players: true
+            }
+        })
+        return res.json(team)
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({ msg: Err.SERVER_ERROR })
+    }
+}
